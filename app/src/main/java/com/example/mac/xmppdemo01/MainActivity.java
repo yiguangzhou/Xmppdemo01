@@ -9,6 +9,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.mac.xmppdemo01.common.Const;
+import com.example.mac.xmppdemo01.common.Storage;
 import com.example.mac.xmppdemo01.common.XMPPUtil;
 import com.example.mac.xmppdemo01.data.DataWarehouse;
 import com.example.mac.xmppdemo01.data.LoginActivity;
@@ -16,7 +18,7 @@ import com.example.mac.xmppdemo01.data.LoginData;
 
 import org.jivesoftware.smack.XMPPConnection;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Const{
 
     private EditText mEditTextUsername;
     private EditText mEditTextPassword;
@@ -35,6 +37,23 @@ public class MainActivity extends AppCompatActivity {
         mCheckBoxAutoLogin = (CheckBox) findViewById(R.id.checkBox2);
 
         mLoginData = DataWarehouse.getApplication(this).loginData;
+        mLoginData.username=Storage.getString(MainActivity.this,KEY_USERNAME);
+        mLoginData.password=Storage.getString(MainActivity.this,KEY_PASSWORD);
+        mLoginData.loginServer=Storage.getString(MainActivity.this,KEY_LOGIN_SERVER);
+        mLoginData.issAutoLogin=Storage.getBoolean(MainActivity.this,KEY_AUTO_LOGIN);
+        mLoginData.isSavePassword=Storage.getBoolean(MainActivity.this,KEY_SAVE_PASSWORD);
+
+        mEditTextUsername.setText(mLoginData.username);
+        mEditTextServer.setText(mLoginData.loginServer);
+        mCheckBoxAutoLogin.setChecked(mLoginData.issAutoLogin);
+        mCheckBoxSavePassword.setChecked(mLoginData.isSavePassword);
+
+        if(mLoginData.isSavePassword){
+            mEditTextPassword.setText(mLoginData.password);
+        }
+        if(mLoginData.issAutoLogin){
+            onClick_Login(null);
+        }
 
     }
 
@@ -68,6 +87,14 @@ public class MainActivity extends AppCompatActivity {
         mLoginData.issAutoLogin=mCheckBoxAutoLogin.isChecked();
         mLoginData.isSavePassword=mCheckBoxSavePassword.isChecked();
 
+        //存储登陆信息
+        Storage.putString(MainActivity.this,KEY_USERNAME,mLoginData.username);
+        Storage.putString(MainActivity.this,KEY_LOGIN_SERVER,mLoginData.loginServer);
+        Storage.pubBoolean(MainActivity.this,KEY_AUTO_LOGIN,mLoginData.issAutoLogin);
+        Storage.pubBoolean(MainActivity.this,KEY_SAVE_PASSWORD,mLoginData.isSavePassword);
+        if(mLoginData.isSavePassword){
+            Storage.putString(MainActivity.this,KEY_PASSWORD,mLoginData.password);
+        }
         new Thread(new Runnable() {
             @Override
             public void run() {
