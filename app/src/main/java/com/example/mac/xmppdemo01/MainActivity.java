@@ -81,9 +81,9 @@ public class MainActivity extends AppCompatActivity implements Const{
 
 
     public void onClick_Login(View view){
-        mLoginData.username= mEditTextUsername.toString();
-        mLoginData.password=mEditTextPassword.toString();
-        mLoginData.loginServer=mEditTextServer.toString();
+        mLoginData.username= mEditTextUsername.getText().toString();
+        mLoginData.password=mEditTextPassword.getText().toString();
+        mLoginData.loginServer=mEditTextServer.getText().toString();
         mLoginData.issAutoLogin=mCheckBoxAutoLogin.isChecked();
         mLoginData.isSavePassword=mCheckBoxSavePassword.isChecked();
 
